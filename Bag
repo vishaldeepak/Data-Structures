@@ -1,0 +1,73 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+
+
+//Simple Bag using linked list.
+public class My_Bag<item> implements Iterable<item>{
+	private int N;
+	private Node<item> first; 
+	
+	private static class Node<item>
+	{
+		private item item;
+		private Node<item> next;
+	}
+	
+	public My_Bag() 
+	{
+		first = null;
+	    N = 0;
+	}
+	
+	
+	public boolean isEmpty() 
+	{
+		return first == null;
+	}
+	  
+	public int size() 
+	{
+		return N;
+	}
+
+	 public void add(item item) 
+	 {
+        Node<item> oldfirst = first;
+        first = new Node<item>();
+        first.item = item;
+        first.next = oldfirst;
+        N++;
+	 }
+	 
+	 public Iterator<item> iterator()  {
+	        return new ListIterator<item>(first);  
+	    }
+
+	 
+	 private class ListIterator<item> implements Iterator<item> 
+	 {
+	        private Node<item> current;
+
+	        public ListIterator(Node<item> first) 
+	        {
+	            current = first;
+	        }
+
+	        public boolean hasNext()  
+	        { 
+	        	return current != null;                     
+	        }
+	        public void remove()      
+	        { 
+	        	throw new UnsupportedOperationException();  
+	        }
+
+	        public item next() {
+	            if (!hasNext()) throw new NoSuchElementException();
+	            item item = current.item;
+	            current = current.next; 
+	            return item;
+	        }
+	    }
+}
