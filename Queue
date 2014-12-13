@@ -1,0 +1,76 @@
+import java.util.Iterator;
+
+public class QueueLinkListIterator<myType>  implements Iterable<myType>
+{
+	Node head,tail;
+		
+	private class Node
+	{
+		myType item;
+		Node next;
+	}
+	
+	
+	public QueueLinkListIterator()
+	{
+		head=null;
+		tail=null;
+	}
+	
+	public boolean isEmpty()
+	{
+		return head == null;	
+	}
+	
+	public void push(myType item)
+	{
+		Node curTail = tail;
+		tail = new Node();
+		tail.item=item;
+		if(isEmpty())
+			head=tail;
+		else
+			curTail.next=tail;
+	}
+	
+	public myType pop()
+	{
+		myType retItem = head.item;
+		head = head.next;
+		if(isEmpty())
+			tail=null;
+		return retItem;
+	}
+
+	@Override
+	public Iterator<myType> iterator() {
+		// TODO Auto-generated method stub
+		return new ListIterator();
+	}
+	
+	private class ListIterator implements Iterator<myType>
+	{
+		Node first = head;
+		
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return first!=null;
+		}
+
+		@Override
+		public myType next() {
+			// TODO Auto-generated method stub
+			myType item = first.item;
+			first= first.next;
+			return item;
+		}
+
+		@Override
+		public void remove() {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException("One does not simply use remove in java iterator");
+		}
+		
+	}
+	
