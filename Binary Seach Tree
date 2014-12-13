@@ -1,0 +1,204 @@
+public class My_BST<Key extends Comparable<Key>,Value> {
+
+	private Node root;
+	
+	
+	
+	private class Node
+	{
+		int N;
+		Key key;
+		Value value;
+		Node left,right;
+		
+		public Node(Key key,Value value,int N)
+		{
+			this.key=key;
+			this.value=value;
+			this.N = N;
+		}
+	}
+	
+	public My_BST()
+	{
+		root= null;
+	}
+	
+	public boolean isEmpty()
+	{
+		return root==null;
+	}
+	
+	public int size()
+	{
+		return size(root);
+	}
+	
+	public int size(Node x)
+	{
+		if(x==null) return 0;
+		return x.N;
+	}
+	
+	public boolean contains(Key x)
+	{
+		return get(x)!=null;
+	}
+	
+	public Value get(Key x)
+	{
+		return get(root,x);
+	}
+	
+	private Value get(Node x,Key y)
+	{
+		if(x==null) return null;
+		int com = y.compareTo(x.key);
+		if(com<0) return get(x.left,y);
+		else if(com>0) return get(x.right,y);
+		else return x.value;
+	}
+	
+	public void put(Key key,Value value)
+	{
+		root = put(root,key,value);
+	}
+	
+	private Node put(Node x,Key key,Value value)
+	{
+		if(x==null) return new Node(key,value,0);
+		int com = key.compareTo(x.key);
+		if(com<0) x.left =  put(x.left,key,value);
+		else if(com>0) x.right =  put(x.right,key,value);
+		else x.value=value;
+		x.N=size(x.left)+size(x.right)+1;
+		return x;
+	}
+	
+	public Key min()
+	{
+		if(isEmpty()) return null;
+		else return min(root);
+	}
+	
+	private Key min(Node x)
+	{
+		if(x.left!=null) return min(x.left);
+		else return x.key;
+	}
+	
+	public Key max()
+	{
+		if(isEmpty()) return null;
+		else return max(root);
+	}
+	
+	private Key max(Node x)
+	{
+		if(x.right!=null) return max(x.right);
+		else return x.key;
+	}
+	
+	public Key floor(Key key)
+	{
+		 Node x = floor(root, key);
+	        if (x == null) return null;
+	        else return x.key;
+	}
+	
+	private Node floor(Node x,Key key)
+	{
+		if(x==null) return null;
+		int cmp = key.compareTo(x.key);
+		if(cmp==0) return x; 
+		if(cmp<0) return floor(x.left,key);
+		Node temp = floor(x.right,key);
+		if(temp==null) return x;
+		else return temp;
+	}
+	
+	public Key ceiling(Key key)
+	{
+		Node x = ceiling(root, key);
+        if (x == null) return null;
+        else return x.key;
+	}
+	
+	private Node ceiling(Node x,Key key)
+	{
+		if(x==null) return null;
+		int cmp = key.compareTo(x.key);
+		if(cmp==0) return x;
+		if(cmp<0) 
+		{
+			Node temp = ceiling(x.left,key);
+			if(temp!=null)
+				return temp;
+			else return x;
+		}
+		return ceiling(x.right, key);
+		
+	}
+	
+	public int rank(Key key)
+	{
+		return rank(root,key);
+	}
+	
+	private int rank(Node x,Key key)
+	{
+		if(x==null) return 0;
+		int cmp = key.compareTo(x.key);
+		if(cmp<0) return rank(x.left,key);
+		if(cmp>0) return 1 + size(x.left) + rank(x.right,key);
+		else return size(x);
+				
+				
+	}
+	
+	public Iterable<Key> KeysLevel()//Level Order 
+	{
+		Queue<Key> x = new Queue<Key>();
+		Queue<Node> y = new Queue<Node>();
+		y.enqueue(root);
+		while(!y.isEmpty())
+		{
+			Node temp =y.dequeue();
+			if(temp==null) continue;
+			x.enqueue(temp.key);
+			y.enqueue(temp.left);
+			y.enqueue(temp.right);
+		}
+		return x;
+	}
+	
+	public Iterable<Key> KeysInOrder()//Level Order 
+	{
+		Queue<Key> x = new Queue<Key>();
+		KeysInOrder(root,x);
+		return x;
+	}
+	
+	private void KeysInOrder(Node cur,Queue<Key> x)
+	{
+		if(cur==null) return;
+		KeysInOrder(cur.left,x);
+		x.enqueue(cur.key);
+		KeysInOrder(cur.right,x);
+	}
+	
+	public static void main(String args[])
+	{
+		My_BST<Integer, String> x = new My_BST<>();
+		x.put(11, "a");
+		x.put(12, "b");
+		x.put(14, "d");
+		x.put(13, "c");
+		
+		
+		for(Integer r : x.KeysInOrder())
+		{
+			System.out.print(r + " ");
+		}
+	}
+}
